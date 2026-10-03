@@ -16,7 +16,8 @@ var dragOffset = Vector2()
 
 func _ready():
 	screenSize = Vector2(DisplayServer.screen_get_size())
-	animatedSprite.play("walk_right")
+	animatedSprite.play("walk")
+	
 	area.input_event.connect(_on_area_input)
 
 func _physics_process(delta: float) -> void:
@@ -31,7 +32,7 @@ func _physics_process(delta: float) -> void:
 		if idleTimer <= 0:
 			isIdling = false
 			speed = 300
-			animatedSprite.play("walk_right")
+			animatedSprite.play("walk")
 		return
 		
 	var windowPosition = Vector2(DisplayServer.window_get_position())
@@ -65,5 +66,12 @@ func _on_area_input(_viewport, event, _shape_idx):
 			var mousePos = Vector2(DisplayServer.mouse_get_position())
 			var winPos = Vector2(DisplayServer.window_get_position())
 			dragOffset = mousePos - winPos
+			animatedSprite.play("pick_up")
+			await get_tree().create_timer(4).timeout
+			animatedSprite.play("charge")
+			if event.is_released:
+				animatedSprite.play("attack")
 		else:
 			isDragging = false
+			animatedSprite.play("walk")
+		
