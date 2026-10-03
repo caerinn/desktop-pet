@@ -69,9 +69,11 @@ func _on_area_input(_viewport, event, _shape_idx):
 			animatedSprite.play("pick_up")
 			await get_tree().create_timer(4).timeout
 			animatedSprite.play("charge")
-			if event.is_released:
-				animatedSprite.play("attack")
+		elif event.is_released && animatedSprite.animation=="charge":
+			animatedSprite.play("attack")
+			await get_tree().create_timer(2.5).timeout
+			isDragging = false
+			animatedSprite.play("walk")
 		else:
 			isDragging = false
 			animatedSprite.play("walk")
-		
